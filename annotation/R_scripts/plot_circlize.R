@@ -1,5 +1,3 @@
-
-setwd("C:/Users/hecto/OneDrive/Escritorio/Master Bioinformatics/3º semester/Organization and annotation of eukariotic genomes/day 1/exercises/result files")
 # Load the circlize package
 library(circlize)
 library(tidyverse)
