@@ -1,7 +1,4 @@
 
-setwd("C:/Users/hecto/OneDrive/Escritorio/Master Bioinformatics/3º semester/Organization and annotation of eukariotic genomes/day 1/exercises/result files")
-
-
 library("tidyverse")
 library("data.table")
 
@@ -80,9 +77,6 @@ plot_sf= ggplot(anno_data_filtered_classified, aes(x = Identity)) +
 pdf("01_full-length-LTR-RT-superfamily.pdf")
 plot(plot_sf)
 dev.off()
-
-
-
 # Create plots for each clade
 plot_cl= ggplot(anno_data_filtered_classified[anno_data_filtered_classified$Superfamily!="unknown",], aes(x = Identity)) +
   geom_histogram(color="black", fill="grey")+
