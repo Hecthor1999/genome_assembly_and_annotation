@@ -168,11 +168,94 @@ and upload the tree files, as well as dataset_color_strip and dataset_simplebar_
 ### Homology-Based Genome Annotation with MAKER
 Run in order
 ```
-sbatch 09_run_create_maker_control
-sbatch 10_run_maker
-sbatch 11_maker_output_format
+sbatch 09_run_create_maker_control.sh
+# modify maker_opts.ctl according to the file in /annotation/extra_files/maker_opts.ctl
+
+sbatch 10_run_maker.sh
+sbatch 11_maker_output_format.sh
+sbatch 12_rename_gene_transcripts.sh
 ```
-### 
+
+### Filtering and Refining Gene Annotations
+Run script to annotate your protein sequences with functional domains
+Calculate AED Values
+Update GFF with InterProScan Results
+Filter the GFF File for Quality
+Extract mRNA Sequences and Filter FASTA Files
+```
+sbatch 13_run_interproscan.sh
+```
+
+### Quality Assessment of Gene Annotations
+Run Busco
+```
+sbatch 14_run_busco.sh
+```
+### Visualize gene annotation
+Run 3rd part to visualize maker annotation in the whole genome
+```
+plot_circlize.R
+```
+### Sequence homology to functionally validated proteins
+Run blast to obtain number of annotated proteins with homology to known proteins
+and map the protein putative functions to the MAKER produced GFF3 and FASTA files
+```
+sbatch 15_run_blast.sh
+```
+
+## 3. Orthology based gene annotation QC and genome comparisons
+
+### OMARK pipeline 
+```
+# create an interactive job
+srun --pty --nodes=1 --ntasks=1 --cpus-per-task=20 --mem=30G -p pibu_el8 --time=20:00:00 bash
+
+# Activate the conda environment
+conda activate /data/courses/assembly-annotation-course/CDS_annotation/containers/OMArk_conda
+
+# download omamer database
+wget https://omabrowser.org/All/LUCA.h5
+
+# run omamer
+omamer search --db LUCA.h5 \
+              --query /data/users/harribas/assembly_course/annotation/output/final/assembly.all.maker.proteins.fasta.renamed.filtered.fasta \
+              --out assembly.all.maker.proteins.fasta.renamed.filtered.fasta.omamer
+
+# Download omamer output and run R script to prepare the omark input or run Rscript omark_input.R in an R environment
+# run omark
+omark -f assembly.all.maker.proteins.fasta.renamed.filtered.fasta.omamer \
+      -of ${protein}.renamed.filtered.fasta \
+      -i omark_input.txt \
+      -d LUCA.h5 \
+      -o omark_output
+```
+finish interactive job
+```
+To to get the sequences of conserved HOGs for which the gene models are Fragmented or Missing.
+sbatch 16_OMArk_contextualize.sh
+```
+
+### Comparative genomics
+For this we run genespace
+```
+# obtain the longest proteins for the fasta file
+sbatch 17_get_longest.sh
+
+# Create the folders with necessary bed files and fasta files
+sbatch 18_run_create_gene_space_folders.sh
+
+# Run genespace
+sbatch 19_run_Genespace.sh
+
+# Download the files Statistics_PerSpecies.tsv and Orthogroups.GeneCount.tsv
+# visualize using R script parse_Orthofinder.R
+
+
+
+
+
+
+
 
 
 
