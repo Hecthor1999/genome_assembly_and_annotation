@@ -1,0 +1,33 @@
+#!/bin/bash
+#SBATCH --time=20:00:00
+#SBATCH --mem=30G
+#SBATCH -p pibu_el8
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=20
+#SBATCH --job-name=busco
+#SBATCH --output=log/busco_%j.out
+#SBATCH --error=log/busco_%j.err
+
+# Load modules
+module load BUSCO/5.4.2-foss-2021a
+
+# set variables
+WORKDIR=/data/users/harribas/assembly_course/annotation/output/final
+COURSEDIR="/data/courses/assembly-annotation-course/CDS_annotation"
+MAKERBIN="$COURSEDIR/softwares/Maker_v3.01.03/src/bin"
+
+# got to wd
+cd $WORKDIR
+
+# run busco
+# options:
+# -i specifies the input file (MAKER proteins or transcripts).
+# -l specifies the lineage dataset (e.g., embryophyta).
+# -o sets the output directory name.
+# -m sets the mode to run on protein data (proteins, or transcriptome if using transcript sequences)
+# -f force (in case of rerun)
+
+busco -i assembly.all.maker.proteins.fasta.renamed.filtered.fasta -l brassicales_odb10 -o busco_output -m proteins -f
+busco -i assembly.all.maker.transcripts.fasta.renamed.filtered.fasta -l brassicales_odb10 -o busco_output -m transcriptome -f
+
+
