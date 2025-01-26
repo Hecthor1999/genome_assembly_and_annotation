@@ -1,0 +1,38 @@
+#!/bin/bash
+#SBATCH --time=00:10:00
+#SBATCH --mem=10G
+#SBATCH -p pibu_el8
+#SBATCH --nodes=1
+#SBATCH --job-name=rename
+#SBATCH --output=log/Maker_formatting_%j.out
+#SBATCH --error=log/Maker_formatting_%j.err
+
+# Create a directory to store the final filtered annotations and copy the necessary files to it
+
+# workind directory
+WORKDIR="/data/users/harribas/assembly_course/annotation/output"
+COURSEDIR="/data/courses/assembly-annotation-course/CDS_annotation"
+MAKERBIN="$COURSEDIR/softwares/Maker_v3.01.03/src/bin"
+
+protein="assembly.all.maker.proteins.fasta"
+transcript="assembly.all.maker.transcripts.fasta"
+gff="assembly.all.maker.noseq.gff"
+prefix="altai5"
+
+mkdir -p  $WORKDIR/final
+
+protein="assembly.all.maker.proteins.fasta"
+transcript="assembly.all.maker.transcripts.fasta"
+gff="assembly.all.maker.noseq.gff"
+
+cp $gff $WORKDIR/final/${gff}.renamed.gff
+cp $protein  $WORKDIR/final/${protein}.renamed.fasta
+cp $transcript  $WORKDIR/final/${transcript}.renamed.fasta
+cd $WORKDIR/final
+
+MAKERBIN="$COURSEDIR/softwares/Maker_v3.01.03/src/bin"
+
+$MAKERBIN/maker_map_ids --prefix ${prefix} --justify 7 ${gff}.renamed.gff > id.map
+$MAKERBIN/map_gff_ids id.map ${gff}.renamed.gff
+$MAKERBIN/map_fasta_ids id.map ${protein}.renamed.fasta
+$MAKERBIN/map_fasta_ids id.map ${transcript}.renamed.fasta
