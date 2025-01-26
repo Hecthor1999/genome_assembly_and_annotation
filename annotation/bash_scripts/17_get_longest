@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=50G
+#SBATCH --time=01:00:00
+#SBATCH --job-name=Filter
+#SBATCH --output=/data/users/harribas/assembly_course/annotation/scripts/log/utput_Filter_%j.o
+#SBATCH --error=/data/users/harribas/assembly_course/annotation/scripts/log/error_Filter_%j.e
+#SBATCH --partition=pibu_el8
+
+
+COURSEDIR=/data/courses/assembly-annotation-course/CDS_annotation
+MAKERBIN=$COURSEDIR/softwares/Maker_v3.01.03/src/bin
+WORKDIR=/data/users/harribas/assembly_course/annotation/output/final
+
+protein="assembly.all.maker.proteins.fasta" 
+transcript="assembly.all.maker.transcripts.fasta" 
+gff="assembly.all.maker.noseq.gff" 
+prefix=altai5
+
+module load SeqKit/2.6.1
+
+cd $WORKDIR
+
+seqkit sort -l -r ${protein}.renamed.filtered.fasta | seqkit rmdup -s > ${protein}.renamed.longest.fasta
+seqkit sort -l -r ${transcript}.renamed.filtered.fasta | seqkit rmdup -s > ${transcript}.renamed.longest.fasta
