@@ -231,7 +231,7 @@ omark -f assembly.all.maker.proteins.fasta.renamed.filtered.fasta.omamer \
 ```
 finish interactive job
 ```
-To to get the sequences of conserved HOGs for which the gene models are Fragmented or Missing.
+# To get the sequences of conserved HOGs for which the gene models are Fragmented or Missing.
 sbatch 16_OMArk_contextualize.sh
 ```
 
