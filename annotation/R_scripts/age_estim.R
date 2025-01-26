@@ -3,8 +3,6 @@ library(hrbrthemes)
 library(tidyverse)
 library(data.table)
 
-setwd("C:/Users/hecto/OneDrive/Escritorio/Master Bioinformatics/3º semester/Organization and annotation of eukariotic genomes/day 1")
-
 # get data from parameter
 data <- "assembly.fasta.mod.out.landscape.Div.Rname.tab"
 
@@ -65,6 +63,3 @@ ggplot(rep_table.m, aes(fill = fam, x = age, weight = value / 1000000)) +
   xlab("Age") +
   ylab("Sequence (Mbp)") +
   theme(axis.text.x = element_text(angle = 90, vjust = 1, size = 9, hjust = 1), plot.title = element_text(hjust = 0.5))
-
-# Question: Do you have other clades of LTR-RTs not present in the full length elements?
-# You have to use the TEsorter output from Intact LTR-RTs and TElib to answer this question
