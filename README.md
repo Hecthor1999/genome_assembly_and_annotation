@@ -246,9 +246,9 @@ sbatch 18_run_create_gene_space_folders.sh
 
 # Run genespace
 sbatch 19_run_Genespace.sh
-
-# Download the files Statistics_PerSpecies.tsv and Orthogroups.GeneCount.tsv
-# visualize using R script parse_Orthofinder.R
+```
+Download the files Statistics_PerSpecies.tsv and Orthogroups.GeneCount.tsv
+visualize using R script parse_Orthofinder.R
 
 
 
