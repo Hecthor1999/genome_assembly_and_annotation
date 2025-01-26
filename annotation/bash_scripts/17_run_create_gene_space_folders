@@ -1,0 +1,26 @@
+#!/bin/bash
+#SBATCH --time=1-0
+#SBATCH --mem=10G
+#SBATCH -p pibu_el8
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=5
+#SBATCH --job-name=genespace
+#SBATCH --output=log/genespace_%j.out
+#SBATCH --error=log/genespace_%j.err
+
+# activate conda
+conda init
+
+# create conda environment
+# conda create -n my_r_env r_essentials
+
+# activate the conda environment
+conda activate my_r_env
+
+# load modules
+module load R/4.1.0-foss-2021a
+module load UCSC-Utils/448-foss-2021a
+module load MariaDB/10.6.4-GCC-10.3.0
+
+# run r script
+Rscript 16-create_Genespace_folders.R
