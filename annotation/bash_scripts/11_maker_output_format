@@ -1,0 +1,21 @@
+#!/bin/bash
+#SBATCH --time=4-0
+#SBATCH --mem=25G
+#SBATCH -p pibu_el8
+#SBATCH --nodes=1
+#SBATCH --job-name=format
+#SBATCH --output=log/Maker_formatting_%j.out
+#SBATCH --error=log/Maker_formatting_%j.err
+
+# The datastore_index.log file will provide insights into the run status and where the data for individual contigs is stored.
+# To merge the individual GFF files into a single file:
+
+#get workdir
+WORKDIR="/data/users/harribas/assembly_course/annotation/output/gene_annotation/"
+COURSEDIR="/data/courses/assembly-annotation-course/CDS_annotation"
+# output preparation for maker
+MAKERBIN="$COURSEDIR/softwares/Maker_v3.01.03/src/bin"
+$MAKERBIN/gff3_merge -s -d ${WORKDIR}/assembly.maker.output/assembly_master_datastore_index.log > assembly.all.maker.gff
+$MAKERBIN/gff3_merge -n -s -d ${WORKDIR}/assembly.maker.output/assembly_master_datastore_index.log > assembly.all.maker.noseq.gff
+$MAKERBIN/fasta_merge -d ${WORKDIR}/assembly.maker.output/assembly_master_datastore_index.log -o assembly
+
