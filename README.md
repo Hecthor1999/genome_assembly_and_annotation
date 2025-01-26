@@ -6,7 +6,7 @@ To achieve this, The genome of the specific sample with accession name Altai5 is
 The best Assembly will the be used to do genome annotation.
 
 # Genome assembly
-# 0. Getting started
+## 0. Getting started
 Go to the wd 
 Create a directory where we can store the data
 
@@ -17,7 +17,7 @@ ln -s /data/users/harribas/assembly_course/raw_data/Altai-5 ./
 ln -s /data/users/harribas/assembly_course/raw_data/RNAseq_Sha ./
 
 ```
-# 1. Quality check
+## 1. Quality check
 
 Run 1_run_fasqc.sh file.
 through job submission
@@ -33,7 +33,7 @@ $ sbatch 02_run_fastp.sh
 ```
 Here fastp is only performed on the rna seq data
 
-# 2. kmer counting
+## 2. kmer counting
 
 Run 03_kmer_counting.sh
 ```
@@ -42,7 +42,7 @@ $ sbatch 03_kmer_counting.sh
 Go to http://genomescope.org/genomescope2.0/
 Upload the histo file and inspect the plots
 
-# 3. Assembly
+## 3. Assembly
 
 To run all three genome assemblers
 ```
@@ -55,7 +55,7 @@ To run the transcriptome assembly
 ```
 07_run_trinity.sh
 ```
-# 4. Assembly evaluation
+## 4. Assembly evaluation
 
 BUSCO, Quast and Merqury were used
 for evaluation and comparison.
@@ -86,7 +86,7 @@ To run BUSCO and to plot its results
 11_run_busco.sh
 12_plot_busco.sh
 ```
-# 5. Genome comparison
+## 5. Genome comparison
 
 Comparison to the reference TAIR10
 and between different accessions.
@@ -111,6 +111,78 @@ sbatch 15_run_accession_comparison.sh
 ```
 then comment out the nucmer lines and uncomment the mummerplot lines
 then run it again.
+
+----------------------------------------------------------------------
+# Genome annotation
+
+## 1. TE annotation 
+### EDTA
+First EDTA is run for TE annotation
+```
+sbatch 01_run_EDTA.sh
+```
+To visualize percentage identity of full length LTR
+we run 
+```
+sbatch 02_sortTE_for_LTR_identity.sh
+```
+
+Then run in R using assembly.fasta.mod.LTR.intact.gff3 and assembly.fasta.mod.LTR.intact.raw.fa.anno.list from EDTA
+```
+plot_hist_clade_ltr_percentage.R
+```
+
+To visualize TE distribution across the genome we use assembly.fasta.mod.EDTA.TEanno.gff3 
+run in R the first 2 parts of
+```
+plot_circlize.R
+```
+### TE classification refining
+```
+sbatch 03_run_tesorter.sh
+```
+To visualize clade abundance 
+```
+abundance_hist.R
+```
+### Dynamics of TEs, age estimation
+```
+sbatch  04_te_age_estimation.sh
+```
+To visualize results
+```
+age_estim.R
+```
+### Phylogenetic analysis
+Run in order
+```
+sbatch 05_phylogenetic_analysis.sh
+sbatch 06_phylogenetic_analysis.sh
+sbatch 07_get_color_list
+sbatch 08_phylogenetic_analysis.sh
+```
+To visualize go to https://itol.embl.de/
+and upload the tree files, as well as dataset_color_strip and dataset_simplebar_template
+
+## 2. Gene annotation
+### Homology-Based Genome Annotation with MAKER
+Run in order
+```
+sbatch 09_run_create_maker_control
+sbatch 10_run_maker
+sbatch 11_maker_output_format
+```
+### 
+
+
+
+
+
+
+
+
+
+
 
 
 
