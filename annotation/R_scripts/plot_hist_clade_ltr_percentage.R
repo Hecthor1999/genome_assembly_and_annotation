@@ -1,4 +1,4 @@
-
+setwd("C:/Users/hecto/OneDrive/Escritorio/Master Bioinformatics/3º semester/Organization and annotation of eukariotic genomes/day 1/exercises/result files")
 library("tidyverse")
 library("data.table")
 
@@ -67,16 +67,29 @@ anno_data_filtered_classified$Identity=as.numeric(as.character(anno_data_filtere
 
 anno_data_filtered_classified$Clade=as.factor(anno_data_filtered_classified$Clade)
 
-# Create a f plots for each Superfamily
-plot_sf= ggplot(anno_data_filtered_classified, aes(x = Identity)) +
-  geom_histogram(color="black", fill="grey")+
-  facet_grid(Superfamily ~ .) +  
-  cowplot::theme_cowplot() 
+plot_sf = ggplot(anno_data_filtered_classified, aes(x = Identity, fill = Superfamily)) +
+  geom_histogram(binwidth = 0.005, color = "black") +
+  facet_wrap(~ Superfamily, scales = "free_y", ncol = length(unique(anno_data_filtered_classified$Superfamily))) +
+  scale_fill_manual(values = c("Copia" = "blue4", "Gypsy" = "firebrick", "NA" = "green")) +
+  cowplot::theme_cowplot() +
+  theme(
+    strip.text = element_text(size = 16, face = "bold"),    
+    axis.title = element_text(size = 14, face = "bold"),   
+    axis.text = element_text(size = 12),                  
+    legend.title = element_text(size = 14, face = "bold"), 
+    legend.text = element_text(size = 12)                 
+  )
+
+# Show the plot
+print(plot_sf)
 
 
-pdf("01_full-length-LTR-RT-superfamily.pdf")
+pdf("01_full-length-LTR-RT-superfamily.pdf",width = 14, height = 8)
 plot(plot_sf)
 dev.off()
+
+
+
 # Create plots for each clade
 plot_cl= ggplot(anno_data_filtered_classified[anno_data_filtered_classified$Superfamily!="unknown",], aes(x = Identity)) +
   geom_histogram(color="black", fill="grey")+
